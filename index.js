@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(cors());
@@ -24,6 +24,17 @@ async function  run(){
             const cursor = itemCollection.find({});
             const result = await cursor.toArray();
             res.send(result)
+
+        })
+        // make an individual API for 
+        // step1:id database er collection e find korbo 
+        // step2:response send korbo
+        app.get("/inventory/:id", async (req, res) =>{
+            const {id} = req.params;
+            console.log("id", id);
+            const query = {_id: ObjectId(id)}
+            const item =await itemCollection.findOne(query)
+            res.send(item)
 
         })
         
