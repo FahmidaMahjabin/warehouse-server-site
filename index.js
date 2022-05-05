@@ -20,9 +20,13 @@ async function  run(){
     await client.connect();
     const itemCollection = client.db("warehouse").collection("itemDetail");
     try{
+        app.get("/", (req, res) =>{
+            res.send("It's Home")
+        })
         app.get("/inventory", async(req, res) =>{
             const cursor = itemCollection.find({});
             const result = await cursor.toArray();
+            console.log("inventory get method")
             res.send(result)
 
         })
@@ -37,6 +41,22 @@ async function  run(){
             res.send(item)
 
         })
+        // update the delevired
+        //step1: inventory/id te update korbo
+        //step2: id diye khuje ber korbo 
+        // step3:jei req.body ta pabo ta res e send korbo
+        app.put("/inventory/:id", async(req, res) =>{
+            const {id} = req.params;
+            const query = {_id: ObjectId(id)};
+            const option = {upsert: true};
+            res.send("req.body:", req.body)
+            const updateDocument = {
+                $set : {quantity: req.body}
+            }
+            const result = await itemCollection.updateOne(query, updateDocument, option)
+            res.send(result)
+        })
+
         
 
 
