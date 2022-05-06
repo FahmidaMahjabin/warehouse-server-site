@@ -50,12 +50,13 @@ async function  run(){
             const query = {_id: ObjectId(id)};
             const option = {upsert: true};
             
-            const item = await itemCollection.findOne(query);
+            // const item = await itemCollection.findOne(query);
+            // const quantity = item.quantity
+            // const quantity = parseInt(req.body.quantity);
             
-            const quantity = item.quantity;
-            console.log("quantity:", quantity)
+            // console.log("quantity:", quantity)
             const updateDocument = {
-                $set : {quantity: quantity-1}
+                $set : req.body
             }
             const result = await itemCollection.updateOne(query, updateDocument, option)
             res.send(result)
