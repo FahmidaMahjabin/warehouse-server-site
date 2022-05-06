@@ -30,6 +30,14 @@ async function  run(){
             res.send(result)
 
         })
+        // delete item
+        app.delete("/inventory/:id", async(req, res) =>{
+            const {id} = req.params;
+            const filter = {_id: ObjectId(id)};
+            const deleteItem = await itemCollection.deleteOne(filter);
+            res.send(deleteItem) 
+        })
+
         // make an individual API for 
         // step1:id database er collection e find korbo 
         // step2:response send korbo
