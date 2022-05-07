@@ -19,6 +19,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function  run(){
     await client.connect();
     const itemCollection = client.db("warehouse").collection("itemDetail");
+    const orderList = client.db("warehouse").collection("orders");
     try{
         app.get("/", (req, res) =>{
             res.send("It's Home")
@@ -43,6 +44,22 @@ async function  run(){
             console.log("newItem:", newItem)
             const result = itemCollection.insertOne(newItem);
             res.send(result)
+        })
+
+        // add item to order
+        app.post("http://localhost:5000/myItems", async(req, res) =>{
+            const myItem = req.body;
+            console.log("myItem:", myItem)
+            const orders =await orderList.insertOne(myItem);
+            res.body(orders)
+        })
+        // get from orders
+        app.get("http://localhost:5000/myItems",async (req, res) =>{
+            const cursor = orderList.find({});
+            const result = await cursor.toArray();
+            console.log("orders")
+            res.send(result)
+
         })
         // make an individual API for 
         // step1:id database er collection e find korbo 
