@@ -37,7 +37,13 @@ async function  run(){
             const deleteItem = await itemCollection.deleteOne(filter);
             res.send(deleteItem) 
         })
-
+        // insert item
+        app.post("/inventory", async(req, res) =>{
+            const newItem = req.body;
+            console.log("newItem:", newItem)
+            const result = itemCollection.insertOne(newItem);
+            res.send(result)
+        })
         // make an individual API for 
         // step1:id database er collection e find korbo 
         // step2:response send korbo
