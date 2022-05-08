@@ -23,6 +23,7 @@ async function  run(){
     try{
         app.get("/", (req, res) =>{
             res.send("It's Home")
+            res.end()
         })
         app.get("/inventory", async(req, res) =>{
             const cursor = itemCollection.find({});
