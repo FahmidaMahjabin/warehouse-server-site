@@ -36,12 +36,15 @@ async function  run(){
             const {id} = req.params;
             const filter = {_id: ObjectId(id)};
             const deleteItem = await itemCollection.deleteOne(filter);
-            res.send(deleteItem) 
+            const cursor =  itemCollection.find({});
+            const resultant =await cursor.toArray();
+            // console.log("delete resultant:", resultant)
+            res.send(resultant) 
         })
         // insert item
         app.post("/inventory", async(req, res) =>{
             const newItem = req.body;
-            console.log("newItem:", newItem)
+            // console.log("newItem:", newItem)
             const result = itemCollection.insertOne(newItem);
             res.send(result)
         })
@@ -49,7 +52,7 @@ async function  run(){
         // add item to order
         app.post("http://localhost:5000/myItems", async(req, res) =>{
             const myItem = req.body;
-            console.log("myItem:", myItem)
+            // console.log("myItem:", myItem)
             const orders =await orderList.insertOne(myItem);
             res.body(orders)
         })
@@ -57,7 +60,7 @@ async function  run(){
         app.get("http://localhost:5000/myItems",async (req, res) =>{
             const cursor = orderList.find({});
             const result = await cursor.toArray();
-            console.log("orders")
+            // console.log("orders")
             res.send(result)
 
         })
@@ -72,13 +75,16 @@ async function  run(){
             res.send(item)
 
         })
-        // update the delevired
+        // update the delivered
         //step1: inventory/id te update korbo
         //step2: id diye khuje ber korbo 
         // step3:jei req.body ta pabo ta res e send korbo
         app.put("/inventory/:id", async(req, res) =>{
             const {id} = req.params;
+            
             const query = {_id: ObjectId(id)};
+            const currentItem = await itemCollection.findOne(query);
+            console.log("current item:", currentItem)
             const option = {upsert: true};
             
             // const item = await itemCollection.findOne(query);
@@ -90,7 +96,14 @@ async function  run(){
                 $set : req.body
             }
             const result = await itemCollection.updateOne(query, updateDocument, option)
-            res.send(result)
+            console.log("result after updating after delivery:",result)
+            if (result.acknowledged){
+                res.send(true)
+            }
+            else{
+                res.send(false)
+            }
+            
         })
 
         
