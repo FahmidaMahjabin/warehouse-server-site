@@ -48,14 +48,14 @@ async function  run(){
         })
 
         // add item to order
-        app.post("http://localhost:5000/myItems", async(req, res) =>{
+        app.post("https://murmuring-retreat-77466.herokuapp.com/myItems", async(req, res) =>{
             const myItem = req.body;
             // console.log("myItem:", myItem)
             const orders =await orderList.insertOne(myItem);
             res.body(orders)
         })
         // get from orders
-        app.get("http://localhost:5000/myItems",async (req, res) =>{
+        app.get("https://murmuring-retreat-77466.herokuapp.com/myItems",async (req, res) =>{
             const cursor = orderList.find({});
             const result = await cursor.toArray();
             // console.log("orders")
@@ -94,13 +94,7 @@ async function  run(){
                 $set : req.body
             }
             const result = await itemCollection.updateOne(query, updateDocument, option)
-            console.log("result after updating after delivery:",result)
-            if (result.acknowledged){
-                res.send(true)
-            }
-            else{
-                res.send(false)
-            }
+            res.send(result)
             
         })
 
