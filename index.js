@@ -21,10 +21,7 @@ async function  run(){
     const itemCollection = client.db("warehouse").collection("itemDetail");
     const orderList = client.db("warehouse").collection("orders");
     try{
-        app.get("/", (req, res) =>{
-            res.send("It's Home")
-            res.end()
-        })
+        
         app.get("/inventory", async(req, res) =>{
             const cursor = itemCollection.find({});
             const result = await cursor.toArray();
@@ -116,7 +113,13 @@ async function  run(){
     }
 
 }
+
 run().catch(console.dir)
+app.get("/", (req, res) =>{
+    res.send("It's Home")
+    
+})
 app.listen(port, ()=>{
     console.log(`port is running ${port}`)
 })
+
